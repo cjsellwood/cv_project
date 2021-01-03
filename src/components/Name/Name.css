@@ -1,0 +1,20 @@
+.name {
+  background-color: rgb(195, 255, 195);
+  padding: 20px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.name h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  padding: 1px 2px;
+  border: 2px solid transparent;
+}
+
+.name input {
+  font-size: 1.8rem;
+  font-weight: 700;
+  width: 50%;
+}

@@ -1,3 +1,6 @@
+# CV Project
+A React app for created a CV with a basic template
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

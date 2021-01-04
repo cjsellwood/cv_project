@@ -21,10 +21,12 @@ class App extends Component {
     work: [],
   };
 
+  // Retrieve state from local storage if it exists
   componentDidMount() {
     const storedState = JSON.parse(localStorage.getItem("state"));
     if (storedState !== null) {
       this.setState(storedState);
+      this.setState({editing: false})
     }
   }
 

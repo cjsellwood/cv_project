@@ -3,6 +3,8 @@ import "./App.css";
 import EditButton from "./components/EditButton/EditButton";
 import Name from "./components/Name/Name";
 import Contact from "./components/Contact/Contact";
+import Education from "./components/Education/Education";
+import Work from "./components/Work/Work";
 
 class App extends Component {
   state = {
@@ -15,6 +17,8 @@ class App extends Component {
       city: "City",
       country: "Country",
     },
+    education: [],
+    work: [],
   };
 
   // Allow editing of all input fields
@@ -40,6 +44,78 @@ class App extends Component {
     this.setState(newState);
   };
 
+  // Add new education form
+  addEducationForm = () => {
+    const education = this.state.education;
+    education.push({
+      name: "",
+      course: "",
+      start: "",
+      end: "",
+      details: "",
+    });
+    this.setState({
+      education: education,
+    });
+  };
+
+  // Edit values of education forms
+  editEducation = (e) => {
+    const education = this.state.education;
+    const id = e.target.getAttribute("data-id");
+    const index = e.target.getAttribute("data-index");
+    education[index][id] = e.target.value;
+    this.setState({
+      education: education,
+    });
+  };
+
+  // Delete specific education form
+  deleteEducationForm = (e) => {
+    const education = this.state.education;
+    const index = e.target.getAttribute("data-index");
+    education.splice(index, 1);
+    this.setState({
+      education: education,
+    });
+  };
+
+  // Add new work experience form
+  addWorkForm = () => {
+    const work = this.state.work;
+    work.push({
+      company: "",
+      role: "",
+      start: "",
+      end: "",
+      details: "",
+    });
+    this.setState({
+      work: work,
+    });
+  };
+
+  // Edit values of work forms
+  editWork = (e) => {
+    const work = this.state.work;
+    const id = e.target.getAttribute("data-id");
+    const index = e.target.getAttribute("data-index");
+    work[index][id] = e.target.value;
+    this.setState({
+      work: work,
+    });
+  };
+
+  // Delete specific education form
+  deleteWorkForm = (e) => {
+    const work = this.state.work;
+    const index = e.target.getAttribute("data-index");
+    work.splice(index, 1);
+    this.setState({
+      work: work,
+    });
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -57,12 +133,20 @@ class App extends Component {
               editContact={(e) => this.editContact(e)}
             ></Contact>
           </section>
-          <section className="education">
-            <h2>Education</h2>
-          </section>
-          <section className="work">
-            <h2>Work Experience</h2>
-          </section>
+          <Education
+            addEducationForm={this.addEducationForm}
+            editing={this.state.editing}
+            education={this.state.education}
+            editEducation={(e) => this.editEducation(e)}
+            deleteEducationForm={(e) => this.deleteEducationForm(e)}
+          ></Education>
+          <Work
+            editing={this.state.editing}
+            work={this.state.work}
+            addWorkForm={this.addWorkForm}
+            editWork={(e) => this.editWork(e)}
+            deleteWorkForm={(e) => this.deleteWorkForm(e)}
+          ></Work>
         </main>
 
         <EditButton

@@ -1,24 +1,10 @@
 .main {
-  background-color: rgb(255, 190, 190);
+  border: 2px solid rgb(0, 0, 0);
   width: 1000px;
   margin: 20px auto;
 }
 
 .top-row {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 66% 34%;
 }
-
-
-
-
-.education {
-  padding: 20px;
-  background-color: rgb(255, 168, 168);
-}
-
-.work {
-  padding: 20px;
-  background-color: rgb(255, 255, 206);
-}
-

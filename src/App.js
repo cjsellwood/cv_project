@@ -21,11 +21,20 @@ class App extends Component {
     work: [],
   };
 
+  componentDidMount() {
+    const storedState = JSON.parse(localStorage.getItem("state"));
+    if (storedState !== null) {
+      this.setState(storedState);
+    }
+  }
+
   // Allow editing of all input fields
   editAll = () => {
     this.setState({
       editing: !this.state.editing,
     });
+    localStorage.setItem("state", JSON.stringify(this.state));
+    console.log(JSON.parse(localStorage.getItem("state")));
   };
 
   // Edit contact information

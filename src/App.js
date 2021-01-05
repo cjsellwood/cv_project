@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import EditButton from "./components/EditButton/EditButton";
 import Name from "./components/Name/Name";
@@ -6,167 +6,157 @@ import Contact from "./components/Contact/Contact";
 import Education from "./components/Education/Education";
 import Work from "./components/Work/Work";
 
-class App extends Component {
-  state = {
-    editing: false,
-    firstName: "First Name",
-    lastName: "Last Name",
-    contact: {
-      email: "Email",
-      phone: "Phone",
-      city: "City",
-      country: "Country",
-    },
-    education: [],
-    work: [],
-  };
+const App = () => {
+  // Set states with hooks
+  const [editing, setEditing] = useState(false);
+  const [firstName, setFirstName] = useState("First Name");
+  const [lastName, setLastName] = useState("Last Name");
+  const [contact, setContact] = useState({
+    email: "Email",
+    phone: "Phone",
+    city: "City",
+    country: "Country",
+  });
+  const [education, setEducation] = useState([]);
+  const [work, setWork] = useState([]);
 
-  // Retrieve state from local storage if it exists
-  componentDidMount() {
-    const storedState = JSON.parse(localStorage.getItem("state"));
-    if (storedState !== null) {
-      this.setState(storedState);
-      this.setState({editing: false})
+  // Get data from local storage on first load
+  useEffect(() => {
+    const state = JSON.parse(localStorage.getItem("state"));
+    if (state !== null) {
+      setFirstName(state.firstName);
+      setLastName(state.lastName);
+      setContact(state.contact);
+      setEducation(state.education);
+      setWork(state.work);
     }
-  }
+  }, []);
 
   // Allow editing of all input fields
-  editAll = () => {
-    this.setState({
-      editing: !this.state.editing,
-    });
-    localStorage.setItem("state", JSON.stringify(this.state));
-    console.log(JSON.parse(localStorage.getItem("state")));
+  const editAll = () => {
+    setEditing(!editing);
+    localStorage.setItem(
+      "state",
+      JSON.stringify({ firstName, lastName, contact, education, work })
+    );
   };
 
   // Edit contact information
-  editContact = (e) => {
+  const editContact = (e) => {
     const id = e.target.getAttribute("data-id");
-    const contact = this.state.contact;
-    contact[id] = e.target.value;
-    this.setState({ contact: contact });
+    setContact((prevState) => ({
+      ...prevState,
+      [id]: e.target.value,
+    }));
   };
 
   // Edit first or last name
-  editName = (e) => {
+  const editName = (e) => {
     const id = e.target.getAttribute("data-id");
-    const newState = this.state;
-    newState[id] = e.target.value;
-    this.setState(newState);
+    if (id === "firstName") {
+      setFirstName(e.target.value);
+    } else {
+      setLastName(e.target.value);
+    }
   };
 
   // Add new education form
-  addEducationForm = () => {
-    const education = this.state.education;
-    education.push({
-      name: "",
-      course: "",
-      start: "",
-      end: "",
-      details: "",
-    });
-    this.setState({
-      education: education,
-    });
+  const addEducationForm = () => {
+    setEducation([
+      ...education,
+      {
+        name: "",
+        course: "",
+        start: "",
+        end: "",
+        details: "",
+      },
+    ]);
   };
 
   // Edit values of education forms
-  editEducation = (e) => {
-    const education = this.state.education;
+  const editEducation = (e) => {
     const id = e.target.getAttribute("data-id");
     const index = e.target.getAttribute("data-index");
-    education[index][id] = e.target.value;
-    this.setState({
-      education: education,
-    });
+    const newEducation = [...education];
+    newEducation[index][id] = e.target.value;
+    setEducation(newEducation);
   };
 
   // Delete specific education form
-  deleteEducationForm = (e) => {
-    const education = this.state.education;
+  const deleteEducationForm = (e) => {
     const index = e.target.getAttribute("data-index");
-    education.splice(index, 1);
-    this.setState({
-      education: education,
-    });
+    const newEducation = [...education];
+    newEducation.splice(index, 1);
+    setEducation(newEducation);
   };
 
   // Add new work experience form
-  addWorkForm = () => {
-    const work = this.state.work;
-    work.push({
-      company: "",
-      role: "",
-      start: "",
-      end: "",
-      details: "",
-    });
-    this.setState({
-      work: work,
-    });
+  const addWorkForm = () => {
+    setWork([
+      ...work,
+      {
+        company: "",
+        role: "",
+        start: "",
+        end: "",
+        details: "",
+      },
+    ]);
   };
 
   // Edit values of work forms
-  editWork = (e) => {
-    const work = this.state.work;
+  const editWork = (e) => {
     const id = e.target.getAttribute("data-id");
     const index = e.target.getAttribute("data-index");
-    work[index][id] = e.target.value;
-    this.setState({
-      work: work,
-    });
+    const newWork = [...work];
+    newWork[index][id] = e.target.value;
+    setWork(newWork);
   };
 
   // Delete specific education form
-  deleteWorkForm = (e) => {
-    const work = this.state.work;
+  const deleteWorkForm = (e) => {
     const index = e.target.getAttribute("data-index");
-    work.splice(index, 1);
-    this.setState({
-      work: work,
-    });
+    const newWork = [...work];
+    newWork.splice(index, 1);
+    setWork(newWork);
   };
 
-  render() {
-    return (
-      <React.Fragment>
-        <main className="main">
-          <section className="top-row">
-            <Name
-              firstName={this.state.firstName}
-              lastName={this.state.lastName}
-              editing={this.state.editing}
-              editName={(e) => this.editName(e)}
-            ></Name>
-            <Contact
-              editing={this.state.editing}
-              contact={this.state.contact}
-              editContact={(e) => this.editContact(e)}
-            ></Contact>
-          </section>
-          <Education
-            addEducationForm={this.addEducationForm}
-            editing={this.state.editing}
-            education={this.state.education}
-            editEducation={(e) => this.editEducation(e)}
-            deleteEducationForm={(e) => this.deleteEducationForm(e)}
-          ></Education>
-          <Work
-            editing={this.state.editing}
-            work={this.state.work}
-            addWorkForm={this.addWorkForm}
-            editWork={(e) => this.editWork(e)}
-            deleteWorkForm={(e) => this.deleteWorkForm(e)}
-          ></Work>
-        </main>
+  return (
+    <React.Fragment>
+      <main className="main">
+        <section className="top-row">
+          <Name
+            firstName={firstName}
+            lastName={lastName}
+            editing={editing}
+            editName={(e) => editName(e)}
+          ></Name>
+          <Contact
+            editing={editing}
+            contact={contact}
+            editContact={(e) => editContact(e)}
+          ></Contact>
+        </section>
+        <Education
+          addEducationForm={addEducationForm}
+          editing={editing}
+          education={education}
+          editEducation={(e) => editEducation(e)}
+          deleteEducationForm={(e) => deleteEducationForm(e)}
+        ></Education>
+        <Work
+          editing={editing}
+          work={work}
+          addWorkForm={addWorkForm}
+          editWork={(e) => editWork(e)}
+          deleteWorkForm={(e) => deleteWorkForm(e)}
+        ></Work>
+      </main>
 
-        <EditButton
-          editAll={this.editAll}
-          editing={this.state.editing}
-        ></EditButton>
-      </React.Fragment>
-    );
-  }
-}
+      <EditButton editAll={editAll} editing={editing}></EditButton>
+    </React.Fragment>
+  );
+};
 
 export default App;

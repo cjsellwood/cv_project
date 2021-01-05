@@ -5,6 +5,7 @@ const Education = (props) => {
   const formsArray = [];
   const displayArray = [];
 
+  // console.log(props.education, props.editing);
   for (let i = 0; i < props.education.length; i++) {
     formsArray.push(
       <form className="educationForm" key={i}>
